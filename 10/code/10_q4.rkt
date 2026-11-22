@@ -41,3 +41,13 @@
 ;; that accepts lists whose original length is less than n.
 (define (insert-if-short x lst n)
   ((make-inserter x (lambda (len) (< len n))) lst))
+
+;; (print-insert-result) -> void
+;; Recursive reading: Read x, lst, and n in order; display the
+;; insertion result followed by a newline.
+(define (print-insert-result)
+  (let* ((x (read))
+         (lst (read))
+         (n (read)))
+    (display (insert-if-short x lst n))
+    (newline)))
