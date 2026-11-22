@@ -94,3 +94,16 @@ tree_precedence(+( _, _), 1).
 tree_precedence(-( _, _), 1).
 tree_precedence(*( _, _), 2).
 tree_precedence('/'( _, _), 2).
+
+%! generate_equation(+List, -Equation) is nondet.
+% Declarative reading: Equation is a valid equation formed by splitting List
+% into two non-empty consecutive parts whose expression trees have equal values.
+
+generate_equation(List, Equation) :-
+    split(List, LeftNums, RightNums),
+    expr(LeftNums, LeftTree, LeftValue),
+    expr(RightNums, RightTree, RightValue),
+    LeftValue =:= RightValue,
+    tree_string(LeftTree, LeftString),
+    tree_string(RightTree, RightString),
+    format(string(Equation), '~s=~s', [LeftString, RightString]).
