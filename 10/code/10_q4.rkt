@@ -17,3 +17,19 @@
       '()
       (cons (f (car lst))
             (my-map f (cdr lst)))))
+
+;; (insert-if-short x lst n) -> list
+;; Recursive reading: Map over every element, recursively processing lists
+;; and leaving atoms unchanged; then cons x if the original list's length
+;; is less than n.
+(define (insert-if-short x lst n)
+  (let ((mapped
+         (my-map
+          (lambda (e)
+            (if (or (null? e) (pair? e))
+                (insert-if-short x e n)
+                e))
+          lst)))
+    (if (< (my-length lst) n)
+        (cons x mapped)
+        mapped)))
