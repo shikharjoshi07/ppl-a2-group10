@@ -1,0 +1,4 @@
+playbook/
+*.tmp
+.DS_Store
+compiled/
