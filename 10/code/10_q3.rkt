@@ -51,3 +51,33 @@
   (newline)
   (display (postorder-acc tree '()))
   (newline))
+
+;; (tree-height tree) -> number
+;; Recursive reading: If tree is empty, return 0; otherwise return 1 plus
+;; the maximum height of the left and right subtrees.
+(define (tree-height tree)
+  (if (null? tree)
+      0
+      (+ 1
+         (max (tree-height (cadr tree))
+              (tree-height (caddr tree))))))
+
+;; (count-leaves tree acc) -> number
+;; Recursive reading: If tree is empty, return acc; if both subtrees are
+;; empty, increment acc; otherwise count the left subtree, then the right.
+(define (count-leaves tree acc)
+  (if (null? tree)
+      acc
+      (if (and (null? (cadr tree))
+               (null? (caddr tree)))
+          (+ acc 1)
+          (count-leaves
+           (cadr tree)
+           (count-leaves (caddr tree) acc)))))
+
+;; (print-height-and-leaves tree) -> void
+;; Recursive reading: Calculate the height and leaf count, display them
+;; together as a two-element list, and terminate with a newline.
+(define (print-height-and-leaves tree)
+  (display (list (tree-height tree) (count-leaves tree 0)))
+  (newline))
