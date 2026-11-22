@@ -43,3 +43,32 @@ clue(3, S) :-
 clue(4, S) :-
     member(p('Ben', Dept, _, web), S),
     Dept \= testing.
+
+% The friend whose favorite language is Java works in the design department.
+%! clue(5, +S) is semidet.
+% Declarative reading: The friend whose favorite language is java works in design.
+clue(5, S) :-
+    member(p(_, design, java, _), S).
+
+% Carla's project preference is not embedded, and her department is not development.
+%! clue(6, +S) is semidet.
+% Declarative reading: Carla does not prefer embedded projects and does not work in development.
+clue(6, S) :-
+    member(p('Carla', Dept, _, Project), S),
+    Dept \= development,
+    Project \= embedded.
+
+% Dana's favorite language is not Java, and she works in research or testing.
+%! clue(7, +S) is semidet.
+% Declarative reading: Dana does not prefer java and works in either research or testing.
+clue(7, S) :-
+    member(p('Dana', Dept, Lang, _), S),
+    Lang \= java,
+    (Dept = research ; Dept = testing).
+
+% The friend who prefers data projects works in research and does not use JavaScript.
+%! clue(8, +S) is semidet.
+% Declarative reading: The friend preferring data projects works in research and does not prefer javascript.
+clue(8, S) :-
+    member(p(_, research, Lang, data), S),
+    Lang \= javascript.
