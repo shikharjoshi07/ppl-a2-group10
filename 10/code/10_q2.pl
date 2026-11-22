@@ -107,3 +107,20 @@ generate_equation(List, Equation) :-
     tree_string(LeftTree, LeftString),
     tree_string(RightTree, RightString),
     format(string(Equation), '~s=~s', [LeftString, RightString]).
+
+%! all_equations(+List, -Equations) is det.
+% Declarative reading: Equations is the sorted list of all distinct valid
+% equations that can be formed from List.
+
+all_equations(List, Equations) :-
+    findall(Equation, generate_equation(List, Equation), Generated),
+    sort(Generated, Equations).
+
+
+%! count_equations(+List, -N) is det.
+% Declarative reading: N is the number of distinct valid equations
+% that can be formed from List.
+
+count_equations(List, N) :-
+    all_equations(List, Equations),
+    length(Equations, N).
