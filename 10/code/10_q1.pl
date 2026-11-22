@@ -72,3 +72,28 @@ clue(7, S) :-
 clue(8, S) :-
     member(p(_, research, Lang, data), S),
     Lang \= javascript.
+
+%! holds_all(+Active, +S) is semidet.
+% Declarative reading: Every clue number in Active holds for solution S.
+holds_all(Active, S) :-
+    forall(
+        member(N, Active),
+        clue(N, S)
+    ).
+
+%! main is det.
+% Declarative reading: The first candidate satisfying all eight clues is printed
+% as four lines, one for each friend in the required order.
+main :-
+    once((
+        candidate(S),
+        holds_all([1,2,3,4,5,6,7,8], S)
+    )),
+    member(p('Alex', D1, L1, P1), S),
+    member(p('Ben', D2, L2, P2), S),
+    member(p('Carla', D3, L3, P3), S),
+    member(p('Dana', D4, L4, P4), S),
+    format("Alex = [~w, ~w, ~w]~n", [D1, L1, P1]),
+    format("Ben = [~w, ~w, ~w]~n", [D2, L2, P2]),
+    format("Carla = [~w, ~w, ~w]~n", [D3, L3, P3]),
+    format("Dana = [~w, ~w, ~w]~n", [D4, L4, P4]).
