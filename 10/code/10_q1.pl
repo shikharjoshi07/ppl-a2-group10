@@ -73,6 +73,12 @@ clue(8, S) :-
     member(p(_, research, Lang, data), S),
     Lang \= javascript.
 
+%! clue(9, +S) is semidet.
+% Declarative reading: The friend working in design prefers embedded projects.
+% CLUE 9: The friend working in the design department prefers the embedded project.
+clue(9, S) :-
+    member(p(_, design, _, embedded), S).
+
 %! holds_all(+Active, +S) is semidet.
 % Declarative reading: Every clue number in Active holds for solution S.
 holds_all(Active, S) :-
