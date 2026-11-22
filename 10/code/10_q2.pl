@@ -40,3 +40,57 @@ combine(LeftTree, RightTree, LeftValue, RightValue,
     RightValue =\= 0,
     LeftValue mod RightValue =:= 0,
     Value is LeftValue // RightValue.
+
+%! tree_string(+Tree, -S) is det.
+% Declarative reading: S is the canonical string representation of Tree,
+% with parentheses determined by operator precedence and associativity.
+
+tree_string(N, S) :-
+    integer(N),
+    format(string(S), '~w', [N]).
+
+tree_string(+(A, B), S) :-
+    tree_string_node(+, A, B, 1, S).
+
+tree_string(-(A, B), S) :-
+    tree_string_node(-, A, B, 1, S).
+
+tree_string(*(A, B), S) :-
+    tree_string_node(*, A, B, 2, S).
+
+tree_string('/'(A, B), S) :-
+    tree_string_node('/', A, B, 2, S).
+
+
+%! tree_string_node(+Op, +A, +B, +Prec, -S) is det.
+% Declarative reading: S represents Op(A,B), formatting both children
+% according to their precedence relative to the parent operator.
+
+tree_string_node(Op, A, B, Prec, S) :-
+    tree_string_child(A, Prec, left, LeftString),
+    tree_string_child(B, Prec, right, RightString),
+    format(string(S), '~s~w~s', [LeftString, Op, RightString]).
+
+
+%! tree_string_child(+Tree, +ParentPrec, +Side, -S) is det.
+% Declarative reading: S represents Tree, adding parentheses exactly when
+% its operator precedence requires them on the specified side of its parent.
+
+tree_string_child(Tree, ParentPrec, Side, S) :-
+    tree_string(Tree, InnerString),
+    (   tree_precedence(Tree, ChildPrec),
+        (   (Side = left, ChildPrec < ParentPrec)
+        ;   (Side = right, ChildPrec =< ParentPrec)
+        )
+    ->  format(string(S), '(~s)', [InnerString])
+    ;   S = InnerString
+    ).
+
+%! tree_precedence(+Tree, -Prec) is semidet.
+% Declarative reading: Prec is the precedence of an operator at the root
+% of Tree; numbers have no operator precedence.
+
+tree_precedence(+( _, _), 1).
+tree_precedence(-( _, _), 1).
+tree_precedence(*( _, _), 2).
+tree_precedence('/'( _, _), 2).
