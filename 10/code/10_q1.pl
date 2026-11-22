@@ -97,3 +97,27 @@ main :-
     format("Ben = [~w, ~w, ~w]~n", [D2, L2, P2]),
     format("Carla = [~w, ~w, ~w]~n", [D3, L3, P3]),
     format("Dana = [~w, ~w, ~w]~n", [D4, L4, P4]).
+
+%! count_solutions(+Active, -N) is det.
+% Declarative reading: N is the number of candidates satisfying every active clue.
+count_solutions(Active, N) :-
+    aggregate_all(
+        count,
+        (
+            candidate(S),
+            holds_all(Active, S)
+        ),
+        N
+    ).
+
+%! list_solutions(+Active, -Sols) is det.
+% Declarative reading: Sols is the list of all candidates satisfying every active clue.
+list_solutions(Active, Sols) :-
+    findall(
+        S,
+        (
+            candidate(S),
+            holds_all(Active, S)
+        ),
+        Sols
+    ).
